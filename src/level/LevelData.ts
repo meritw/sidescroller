@@ -1,54 +1,57 @@
+import type { SheetKey } from "./TileRegistry";
+
 /** A horizontal run of ground tiles. */
 export interface GroundSegment {
-  tileX: number;     // left edge (tile column)
-  tileCount: number; // width in tiles
+  tileX: number;
+  tileCount: number;
 }
 
 /** A floating platform the player can jump onto. */
 export interface PlatformDef {
-  tileX: number;      // left edge (tile column)
-  tileY: number;      // surface row — the row players stand on
-  tileCount: number;  // width in tiles
-  fillRows: number;   // visual fill rows below surface (no physics body)
+  tileX: number;
+  tileY: number;
+  tileCount: number;
+  fillRows: number;
 }
 
-/** A tile from tiles.png placed purely for decoration (no physics). */
-export interface WallDecoration {
+/** A purely-decorative tile drawn from any sheet (no physics). */
+export interface DecorTile {
   tileX: number;
   tileY: number;
   frame: number;
+  sheet: SheetKey;
+  /** Lower depths render further back. Default 0. */
+  depth?: number;
+  /** Optional horizontal flip. */
+  flipX?: boolean;
 }
 
-/** A sprite from props.png placed as foreground decoration. */
+/** A foreground prop placed at pixel coordinates (no physics). */
 export interface PropDef {
-  /** pixel x of left edge */
   x: number;
-  /** pixel y of top edge */
   y: number;
-  /** frame index into props.png (16×16 per frame, 8 cols × 14 rows) */
   frame: number;
+  sheet: SheetKey;
+  depth?: number;
+  flipX?: boolean;
 }
 
 export interface CoinDef {
-  x: number; // pixel centre
-  y: number; // pixel centre
-}
-
-/** A 2×3 pillar placed as background decoration. */
-export interface PillarDef {
-  tileX: number; // left column
-  tileY: number; // top row
+  x: number;
+  y: number;
 }
 
 export interface LevelData {
   seed: number;
   worldWidthPx: number;
-  /** Pixel Y of the top of the ground surface row. */
   groundY: number;
   ground: GroundSegment[];
   platforms: PlatformDef[];
-  pillars: PillarDef[];
-  wallDecor: WallDecoration[];
+  /** Background decoration tiles (brick walls, doors, neon). */
+  backdrop: DecorTile[];
+  /** Foreground decoration tiles (overlay above platforms). */
+  foreground: DecorTile[];
+  /** Free-positioned props (light posts, signs, trash). */
   props: PropDef[];
   coins: CoinDef[];
 }
