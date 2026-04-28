@@ -80,27 +80,32 @@ export class GameScene extends Phaser.Scene {
     this.add
       .image(480, 270, "bg-base")
       .setDisplaySize(960, 540)
-      .setScrollFactor(0);
+      .setScrollFactor(0)
+      .setDepth(-100);
 
     // Distant city silhouette — tiled, slow parallax
     this.bgCity = this.add
       .tileSprite(0, 540 - 208, 960, 208, "bg-city")
       .setOrigin(0, 0)
-      .setScrollFactor(0);
+      .setScrollFactor(0)
+      .setAlpha(0.5)
+      .setDepth(-90);
 
     // Mid fog — sits above ground, moderate parallax
     this.bgFogMid = this.add
       .tileSprite(0, 540 - 200, 960, 200, "bg-fog-mid")
       .setOrigin(0, 0)
       .setScrollFactor(0)
-      .setAlpha(0.6);
+      .setAlpha(0.3)
+      .setDepth(-30);
 
     // Near fog — hugs the ground, fast parallax
     this.bgFogNear = this.add
       .tileSprite(0, 540 - 120, 960, 120, "bg-fog-near")
       .setOrigin(0, 0)
       .setScrollFactor(0)
-      .setAlpha(0.5);
+      .setAlpha(0.25)
+      .setDepth(-25);
   }
 
   private createCoins(coinDefs: { x: number; y: number }[]): void {
@@ -132,6 +137,9 @@ export class GameScene extends Phaser.Scene {
 
     // ADD blend: makes the solid black background transparent
     this.player.setBlendMode(Phaser.BlendModes.ADD);
+
+    // Render in front of foreground decor (depth 5–6), behind UI.
+    this.player.setDepth(10);
 
     this.player.setCollideWorldBounds(true);
     this.player.setDragX(600);
